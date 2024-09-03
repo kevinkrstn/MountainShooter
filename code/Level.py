@@ -9,7 +9,7 @@ from pygame.font import Font
 
 from code.Const import C_WHITE, WIN_HEIGHT, MENU_OPTION, EVENT_ENEMY, SPAWN_TIME, C_GREEN, C_CYAN, EVENT_TIMEOUT, \
     TIMEOUT_STEP, TIMEOUT_LEVEL
-from code.Enemy import Enemy
+from code.Enemy import Enemy, Enemy3
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 from code.EntityMediator import EntityMediator
@@ -18,7 +18,8 @@ from code.Player import Player
 
 class Level:
     def __init__(self, window: Surface, name: str, game_mode: str, player_score: list[int]):
-        self.timeout = TIMEOUT_LEVEL
+        # O level 3 deve ter uma duração de fase que é o dobro da duração dos level 1 e level 2
+        self.timeout = (TIMEOUT_LEVEL * 2 if (name == 'Level3') else TIMEOUT_LEVEL)
         self.window = window
         self.name = name
         self.game_mode = game_mode
@@ -44,7 +45,8 @@ class Level:
             for ent in self.entity_list:
                 self.window.blit(source=ent.surf, dest=ent.rect)
                 ent.move()
-                if isinstance(ent, (Player, Enemy)):
+                #  O inimigo ‘Enemy3’ deve atirar e causar dano
+                if isinstance(ent, (Player, Enemy, Enemy3)):
                     shoot = ent.shoot()
                     if shoot is not None:
                         self.entity_list.append(shoot)
@@ -57,8 +59,11 @@ class Level:
                     pygame.quit()
                     sys.exit()
                 if event.type == EVENT_ENEMY:
-                    choice = random.choice(('Enemy1', 'Enemy2'))
-                    self.entity_list.append(EntityFactory.get_entity(choice))
+                    if self.name == 'Level3':
+                        self.entity_list.append(EntityFactory.get_entity('Enemy3'))
+                    else:
+                        choice = random.choice(('Enemy1', 'Enemy2'))
+                        self.entity_list.append(EntityFactory.get_entity(choice))
                 if event.type == EVENT_TIMEOUT:
                     self.timeout -= TIMEOUT_STEP
                     if self.timeout == 0:

@@ -28,8 +28,12 @@ class Game:
                 if level_return:
                     level = Level(self.window, 'Level2', menu_return, player_score)
                     level_return = level.run(player_score)
+                    # O level 3 deve aparecer após o level 2 e antes da tela final de score
                     if level_return:
-                        score.save(menu_return, player_score)
+                        level = Level(self.window, 'Level3', menu_return, player_score)
+                        level_return = level.run(player_score)
+                        if level_return:
+                            score.save(menu_return, player_score)
 
             elif menu_return == MENU_OPTION[3]:
                 score.show()

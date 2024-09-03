@@ -5,7 +5,7 @@ import pygame.image
 from pygame import Surface, Rect
 from pygame.font import Font
 
-from code.Const import WIN_WIDTH, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW
+from code.Const import WIN_WIDTH, WIN_HEIGHT, C_ORANGE, MENU_OPTION, C_WHITE, C_YELLOW
 
 
 class Menu:
@@ -23,6 +23,10 @@ class Menu:
             self.window.blit(source=self.surf, dest=self.rect)
             self.menu_text(50, "Mountain", C_ORANGE, ((WIN_WIDTH / 2), 70))
             self.menu_text(50, "Shooter", C_ORANGE, ((WIN_WIDTH / 2), 120))
+
+            # O menu deve conter em qualquer um dos 4 cantos da tela o nome completo e RU
+            self.menu_text(16, "Kevin Kristian Campos Azevedo - RU: 4885984", C_YELLOW,
+                           (10, 10), align='topleft')
 
             for i in range(len(MENU_OPTION)):
                 if i == menu_option:
@@ -50,8 +54,14 @@ class Menu:
                     if event.key == pygame.K_RETURN:  # ENTER
                         return MENU_OPTION[menu_option]
 
-    def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple):
+    def menu_text(self, text_size: int, text: str, text_color: tuple, text_center_pos: tuple, align: str = 'center'):
         text_font: Font = pygame.font.SysFont(name="Lucida Sans Typewriter", size=text_size)
         text_surf: Surface = text_font.render(text, True, text_color).convert_alpha()
         text_rect: Rect = text_surf.get_rect(center=text_center_pos)
+
+        if align == 'topleft':
+            text_rect.topleft = text_center_pos
+        else:
+            text_rect.center = text_center_pos
+
         self.window.blit(source=text_surf, dest=text_rect)

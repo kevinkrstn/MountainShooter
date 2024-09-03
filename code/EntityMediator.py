@@ -1,5 +1,5 @@
 from code.Const import WIN_WIDTH
-from code.Enemy import Enemy
+from code.Enemy import Enemy, Enemy3
 from code.EnemyShot import EnemyShot
 from code.Entity import Entity
 from code.Player import Player
@@ -23,9 +23,9 @@ class EntityMediator:
     @staticmethod
     def __verify_collision_entity(ent1, ent2):
         valid_interaction = False
-        if isinstance(ent1, Enemy) and isinstance(ent2, PlayerShot):
+        if isinstance(ent1, (Enemy, Enemy3)) and isinstance(ent2, PlayerShot):
             valid_interaction = True
-        elif isinstance(ent1, PlayerShot) and isinstance(ent2, Enemy):
+        elif isinstance(ent1, PlayerShot) and isinstance(ent2, (Enemy, Enemy3)):
             valid_interaction = True
         elif isinstance(ent1, Player) and isinstance(ent2, EnemyShot):
             valid_interaction = True
